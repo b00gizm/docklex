@@ -1,14 +1,11 @@
 FROM ubuntu
 
-RUN echo "deb http://archive.ubuntu.com/ubuntu raring main restricted universe multiverse" > /etc/apt/sources.list
-RUN apt-get update
-
 # Basics
-RUN apt-get install -y python-setuptools git curl
+RUN apt-get update && apt-get install -y python-setuptools git curl
 
 # PHP & nginx
-RUN apt-get install -y php5-cli php5-fpm nginx
-RUN echo "cgi.fix_pathinfo = 0;" >> /etc/php5/fpm/php.ini
+RUN apt-get install -y php-cli php-fpm nginx
+RUN echo "cgi.fix_pathinfo = 0;" >> /etc/php/7.0/fpm/php.ini
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
 # Install Composer
@@ -21,4 +18,4 @@ ADD .docker/nginx.conf /etc/nginx/sites-available/default
 EXPOSE 80
 
 # Run it
-CMD ["sh", "-c", "cd /var/www/docklex && composer update && service php5-fpm start && nginx"]
+CMD ["sh", "-c", "cd /var/www/docklex && composer update && service php-fpm start && nginx"]
